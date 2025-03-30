@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>DOM Practice</title>
+  </head>
+  <body>
+    <button id="textBtn">Change Text</button>
+    <button id="colorBtn">Change Color</button>
+    <button id="sizeBtn">Change Font Size</button>
+    <button id="decreaseSizeBtn">Decrease Font Size</button>
+    <button id="toggleText">Toggle Text</button>
+    <button id="toggleTextUpperandLower">Toggle Text for UpperCase and LowerCase</button>
+    <button id="randomBgBtn">Random Background</button>
+    <button id="toggleVisibilityBtn">Toggle Visibility</button>
+    <button id="alignBtn">Cycle Alignment</button>
+    <button id="fontBtn">Cycle Font</button>
+    <button id="boldBtn">Toggle Bold</button>
+    <button id="italicBtn">Toggle Italic</button>
+    <button id="underlineBtn">Toggle Underline</button>
+    <button id="rotateBtn">Rotate Text</button>
+    <button id="scaleBtn">Scale Text</button>
+    <p id="myPara">Hello, Bhai!</p>
+    
+
+    <script>
+      // Elements select karo
+      let textBtn = document.getElementById("textBtn");
+      let colorBtn = document.getElementById("colorBtn");
+      let sizeBtn = document.getElementById("sizeBtn");
+      let decreaseSizeBtn = document.getElementById("decreaseSizeBtn");
+      let toggleText = document.getElementById("toggleText");
+      let para = document.getElementById("myPara");
+      let toggleTextUpperandLower = document.getElementById("toggleTextUpperandLower");
+      let randomBgBtn = document.getElementById("randomBgBtn")
+      let body = document.querySelector('body')
+      let toggleVisibilityBtn = document.getElementById('toggleVisibilityBtn')
+      let alignBtn = document.getElementById("alignBtn");
+      let fontBtn = document.getElementById("fontBtn")
+      let boldBtn = document.getElementById("boldBtn")
+      let italicBtn = document.getElementById("italicBtn")
+      let underlineBtn = document.getElementById("underlineBtn")
+      let rotateBtn = document.getElementById("rotateBtn")
+      let scaleBtn = document.getElementById("scaleBtn")
+
+    //  Update body color
+    body.style.backgroundColor = "cyan"
+
+      // Toggle ke liye state track karne ka variable
+      let isClicked = false;
+      let isUpperCase = false; // Uppercase/lowercase ke liye state
+      let isVisible = true;
+      let alignmentState = 0;
+      let fontState = 0;
+      let isBold = false;
+      let isItalic = false;
+      let isUnderlined = false;
+      let rotationState = 0;
+      let scaleState = 0;
+
+      // Helper function to update transform based on both rotation and scale
+      function updateTransform() {
+            let rotationAngle;
+            if (rotationState === 0) rotationAngle = 90;
+            else if (rotationState === 1) rotationAngle = 180;
+            else if (rotationState === 2) rotationAngle = 270;
+            else rotationAngle = 0;
+
+            let scaleValue;
+            if (scaleState === 0 || scaleState === 3) scaleValue = 1;
+            else if (scaleState === 1) scaleValue = 1.5;
+            else scaleValue = 2;
+
+            para.style.transform = `rotate(${rotationAngle}deg) scale(${scaleValue})`;
+        }
+
+      // Text change karne ka event
+      textBtn.addEventListener("click", function () {
+        para.innerHTML = "Clicked, Bhai!";
+        isClicked = true; // State sync karo
+      });
+
+      // Color change karne ka event
+      colorBtn.addEventListener("click", function () {
+        para.style.color = "blue";
+      });
+
+      // Font Size change karne ka event
+      sizeBtn.addEventListener("click", function () {
+        let currentSize = para.style.fontSize ? parseInt(para.style.fontSize) : 16;
+        let newSize = currentSize + 5;
+        if (newSize <= 50) {
+            para.style.fontSize = newSize + "px"
+        } else {
+            para.style.fontSize = "50px"
+        }
+      });
+
+      decreaseSizeBtn.addEventListener("click", function () {
+        let currentSize = para.style.fontSize ? parseInt(para.style.fontSize): 16;
+        let newSize = currentSize - 5;
+        // Check karo ki nayi size 10px se kam toh nahi
+        if (newSize >= 10) {
+          para.style.fontSize = newSize + "px";
+        } else {
+          para.style.fontSize = "10px"; // Minimum 10px set karo
+        }
+      });
+
+      // Switch Text
+      toggleText.addEventListener("click", function () {
+        if (isClicked) {
+          para.innerHTML = "Hello, Bhai!";
+          para.style.color = "black"; // Challenge: Hello pe black
+          isClicked = false;
+        } else {
+          para.innerHTML = "Clicked, Bhai!";
+          para.style.color = "green"; // Challenge: Clicked pe green
+          isClicked = true;
+        }
+      });
+
+      // Random Background Color for Paragraph
+      randomBgBtn.addEventListener("click", function() {
+            let r = Math.floor(Math.random() * 256);
+            let g = Math.floor(Math.random() * 256);
+            let b = Math.floor(Math.random() * 256);
+            para.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+        });
+
+    // Upper Case and Lower Case Toggle
+    toggleTextUpperandLower.addEventListener("click", function() {
+       if (isUpperCase) {
+        para.innerHTML = para.innerHTML.toLowerCase()
+        isUpperCase = false
+       } else {
+        para.innerHTML = para.innerHTML.toUpperCase()
+        isUpperCase = true
+       }
+    });
+
+    // Toggle Visibility ke liye function
+    toggleVisibilityBtn.addEventListener("click", function() {
+      if (isVisible) {
+        para.style.display = "none";
+        isVisible = false;
+      } else {
+        para.style.display = "block";
+        isVisible = true;
+      }
+    });
+
+    // Alignment Cycle Logic
+    alignBtn.addEventListener("click", function() {
+      if (alignmentState === 0) {
+        para.style.textAlign = "left"
+      } else if (alignmentState === 1) {
+        para.style.textAlign = "center"
+      } else if (alignmentState === 2) {
+        para.style.textAlign = "right"
+      }
+      alignmentState = (alignmentState + 1) % 3;
+    });
+
+    // Font Cycle Logic
+    fontBtn.addEventListener("click", function() {
+      if (fontState === 0) {
+        para.style.fontFamily = "Arial"
+      } else if (fontState === 1) {
+        para.style.fontFamily = "Times New Roman"
+      } else if (fontState === 2) {
+        para.style.fontFamily = "Courier New"
+      }
+      fontState = (fontState + 1) % 3;
+    });
+
+    // Font weight toggle logic
+    boldBtn.addEventListener("click", function() {
+      if (isBold) {
+        para.style.fontWeight = "normal"
+        isBold = false;
+      } else {
+        para.style.fontWeight = "bold"
+        isBold = true;
+      }
+    })
+
+    // Italic Font Toggle
+    italicBtn.addEventListener("click", function() {
+      if (isItalic) {
+        para.style.fontStyle = "normal";
+        isItalic = false;
+      } else {
+        para.style.fontStyle = "italic";
+        isItalic = true;
+      }
+    });
+
+    // Underline Toggle logic
+    underlineBtn.addEventListener("click", function() {
+      if (isUnderlined) {
+        para.style.textDecoration = "none"
+        isUnderlined = false;
+      } else {
+        para.style.textDecoration = "underline"
+        isUnderlined = true;
+      }
+    });
+
+    // Rotation of text
+    rotateBtn.addEventListener("click", function() {
+            rotationState = (rotationState + 1) % 4;
+            updateTransform();
+        });
+
+        // Scale text
+        scaleBtn.addEventListener("click", function(){
+            scaleState = (scaleState + 1) % 4;
+            updateTransform();
+        });
+    </script>
+  </body>
+</html>
